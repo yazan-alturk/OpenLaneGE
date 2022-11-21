@@ -13,64 +13,110 @@
 # limitations under the License.
 yosys -import
 
-proc exclude_fills {args} {
-	set fills "$::env(CELL_PAD_EXCLUDE)"
-	foreach fill_wildcard $fills {
-		hierarchy -generate $fill_wildcard
-	}
+if { [info exists ::env(FP_WELLTAP_CELL)] && $::env(FP_WELLTAP_CELL) ne ""} {
+	set well_tap_cell "$::env(FP_WELLTAP_CELL)"
 }
+set decap_cell_wildcard "$::env(DECAP_CELL)*"
+set fill_cell_wildcard "$::env(FILL_CELL)*"
 
-proc initialize {args} {
-	if { [info exists ::env(SYNTH_DEFINES) ] } {
-		foreach define $::env(SYNTH_DEFINES) {
-			puts "Defining $define"
-			verilog_defines -D$define
-		}
-	}
-	if { [info exists ::env(VERILOG_FILES_BLACKBOX)] } {
-		foreach verilog_file $::env(VERILOG_FILES_BLACKBOX) {
-			read_verilog -lib $verilog_file
-		}
-	}
-	foreach lib $::env(LIB_TYPICAL) {
-		read_liberty -ignore_miss_func -ignore_miss_dir $lib
-	}
-}
-
-proc read_nl {netlist name} {
-	initialize
-	read_verilog $netlist
-
-	rmports
-
-	exclude_fills
-
-	splitnets -ports
-	hierarchy -top $::env(DESIGN_NAME)
-
-	if { $::env(SYNTH_FLAT_TOP) } {
-		flatten
-	}
-
-	stat
-	renames -top $name
-	design -stash $name
-}
+set vtop $::env(DESIGN_NAME)
+#set sdc_file $::env(SDC_FILE)
 
 # LHS
-read_nl $::env(LEC_LHS_NETLIST) gold
+if { [info exists ::env(SYNTH_DEFINES) ] } {
+	foreach define $::env(SYNTH_DEFINES) {
+		puts "Defining $define"
+		verilog_defines -D$define
+	}
+}
+if { [info exists ::env(VERILOG_FILES_BLACKBOX)] } {
+	foreach verilog_file $::env(VERILOG_FILES_BLACKBOX) {
+		read_verilog -lib $verilog_file
+	}
+}
+foreach lib $::env(LIB_SYNTH_COMPLETE_NO_PG) {
+	read_liberty -nooverwrite -lib -ignore_miss_dir -setattr blackbox $lib
+}
+
+read_verilog $::env(LEC_LHS_NETLIST)
+rmports
+if { [info exists well_tap_cell] } {
+	hierarchy -generate $well_tap_cell
+}
+hierarchy -generate $decap_cell_wildcard
+hierarchy -generate $fill_cell_wildcard
+splitnets -ports;;
+hierarchy -auto-top
+if { $::env(SYNTH_FLAT_TOP) } {
+	flatten
+}
+setattr -set keep 1
+stat
+renames -top gold
+design -stash gold
+
 
 # RHS
-read_nl $::env(LEC_RHS_NETLIST) gate
+# Rebuild the database due to -stash
+if { [info exists ::env(SYNTH_DEFINES) ] } {
+	foreach define $::env(SYNTH_DEFINES) {
+		puts "Defining $define"
+		verilog_defines -D$define
+	}
+}
+if { [info exists ::env(VERILOG_FILES_BLACKBOX)] } {
+	foreach verilog_file $::env(VERILOG_FILES_BLACKBOX) {
+		read_verilog -lib $verilog_file
+	}
+}
+foreach lib $::env(LIB_SYNTH_COMPLETE_NO_PG) {
+	read_liberty -nooverwrite -lib -ignore_miss_dir -setattr blackbox $lib
+}
 
-# LEC
+read_verilog $::env(LEC_RHS_NETLIST)
+rmports
+if { [info exists well_tap_cell] } {
+	hierarchy -generate $well_tap_cell
+}
+hierarchy -generate $decap_cell_wildcard
+hierarchy -generate $fill_cell_wildcard
+splitnets -ports;;
+hierarchy -auto-top
+if { $::env(SYNTH_FLAT_TOP) } {
+	flatten
+}
+setattr -set keep 1
+stat
+renames -top gate
+design -stash gate
+
+
 design -copy-from gold -as gold gold
 design -copy-from gate -as gate gate
 
-initialize
-exclude_fills
+# Rebuild the database due to -stash
+if { [info exists ::env(SYNTH_DEFINES) ] } {
+	foreach define $::env(SYNTH_DEFINES) {
+		puts "Defining $define"
+		verilog_defines -D$define
+	}
+}
+if { [info exists ::env(VERILOG_FILES_BLACKBOX)] } {
+	foreach verilog_file $::env(VERILOG_FILES_BLACKBOX) {
+		read_verilog -lib $verilog_file
+	}
+}
+foreach lib $::env(LIB_SYNTH_COMPLETE_NO_PG) {
+	read_liberty -nooverwrite -lib -ignore_miss_dir -setattr blackbox $lib
+}
 
 equiv_make gold gate equiv
+if { [info exists well_tap_cell] } {
+	hierarchy -generate $well_tap_cell
+}
+hierarchy -generate $decap_cell_wildcard
+hierarchy -generate $fill_cell_wildcard
+setattr -set keep 1
 prep -flatten -top equiv
 equiv_simple -seq 10 -v
 equiv_status -assert

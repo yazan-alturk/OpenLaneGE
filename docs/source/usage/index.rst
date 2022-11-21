@@ -1,6 +1,5 @@
-Usage guides
-------------------------
-
+Using OpenLane
+---------------
 .. toctree::
    :glob:
 
@@ -10,5 +9,4 @@ Usage guides
    chip_integration
    advanced_power_grid_control
    custom_pdk_builds
-
    

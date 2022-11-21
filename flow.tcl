@@ -365,6 +365,7 @@ proc run_lvs_batch {args} {
         puts_warn "The file $::env(EXT_NETLIST) will be used. If you would like the file re-exported, please delete it."
     } else {
         run_magic_spice_export
+        #exec cp /openlane/designs/spm/runs/tmp/signoff/$::env(DESIGN_NAME).cdl /openlane/designs/spm/runs/results/signoff
     }
 
     run_lvs

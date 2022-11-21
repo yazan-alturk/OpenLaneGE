@@ -33,8 +33,9 @@ if { ! $::env(LVS_CONNECT_BY_LABEL) } {
 }
 # extract warn all
 extract
-
 ext2spice lvs
 ext2spice -o $::env(EXT_NETLIST) $::env(DESIGN_NAME).ext
+exec klayout -b -rd input=$::env(signoff_results)/$::env(DESIGN_NAME).gds -r /openlane/scripts/magic/spice_generator.lvs
 feedback save $::env(signoff_reports)/$::env(_tmp_magic_extract_type).feedback.txt
+#file copy -force $::env(signoff_tmpfiles)/$::env(DESIGN_NAME).cdl $::env(signoff_results)
 # exec cp $::env(DESIGN_NAME).spice $::env(signoff_results)/$::env(DESIGN_NAME).spice

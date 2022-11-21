@@ -1,0 +1,37 @@
+set design "picorv32a"
+
+package require openlane
+
+prep -design $design
+
+run_synthesis
+
+run_floorplan
+
+run_placement
+
+run_cts
+
+run_routing
+
+run_parasitics_sta
+
+#run_eco_flow
+
+run_irdrop_report
+
+run_magic
+
+#run_klayout
+
+run_magic_spice_export
+
+run_lvs
+
+run_magic_drc
+
+run_klayout_drc
+
+run_antenna_check
+
+#run_erc

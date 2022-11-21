@@ -18,7 +18,7 @@
     make install
 - name: netgen
   repo: https://github.com/rtimothyedwards/netgen
-  commit: 2292ab813b54cc6d6fa41368c4e0e7492fb627c9
+  commit: 3aeea9d1642c8d87911ed13626c77e4888caa9eb
   build: |
     ./configure --prefix=$PREFIX $MAGIC_CONFIG_OPTS
     make clean
@@ -45,7 +45,7 @@
     cp vlog2Verilog $PREFIX/bin
 - name: yosys
   repo: https://github.com/YosysHQ/yosys
-  commit: f109fa3d4c56fe33bc626c298e04d45ae510dd0e
+  commit: 6e907acf86d9ff0edd9a1c10274e62690e19e939
   build: |
     make clean
     make PREFIX=$PREFIX config-gcc
@@ -58,7 +58,7 @@
   in_install: false
 - name: openroad_app
   repo: https://github.com/The-OpenROAD-Project/OpenROAD
-  commit: 7f00621cb612fd94e15b35790afe744c89d433a7
+  commit: 127815b81a8624caebc06d0bedc2ea3a22e90500
   build: ''
   in_install: false
 - name: git
@@ -68,7 +68,7 @@
   in_install: false
 - name: open_pdks
   repo: https://github.com/RTimothyEdwards/open_pdks
-  commit: 3af133706e554a740cfe60f21e773d9eaa41838c
+  commit: 0059588eebfc704681dc2368bd1d33d96281d10f
   build: ''
   in_install: false
   pdk: true

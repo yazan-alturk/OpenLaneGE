@@ -49,7 +49,7 @@ proc set_netlist {args} {
     try_catch sed -i -e "s/\\(set ::env(CURRENT_NETLIST)\\).*/\\1 $replace/" "$::env(GLB_CFG_FILE)"
 
     if { [info exists flags_map(-lec)] && $::env(LEC_ENABLE) && [file exists $previous_netlist] } {
-        logic_equiv_check -lhs $previous_netlist -rhs $netlist
+        logic_equiv_check -rhs $previous_netlist -lhs $netlist
     }
 }
 
@@ -496,7 +496,8 @@ proc prep {args} {
     if { [info exists arg_values(-run_path)] } {
         set run_path "[file normalize $arg_values(-run_path)]/$tag"
     } else {
-        set run_path $::env(DESIGN_DIR)/runs/$tag
+	#YAset run_path $::env(DESIGN_DIR)/runs/$tag
+        set run_path $::env(DESIGN_DIR)/runs
     }
 
     file mkdir $run_path
@@ -626,10 +627,7 @@ proc prep {args} {
     handle_deprecated_config GLB_RT_MACRO_EXTENSION GRT_MACRO_EXTENSION;
     handle_deprecated_config GLB_RT_LAYER_ADJUSTMENTS GRT_LAYER_ADJUSTMENTS;
 
-    handle_deprecated_config TAP_DECAP_INSERTION RUN_TAP_DECAP_INSERTION;
     handle_deprecated_config RUN_ROUTING_DETAILED RUN_DRT; # Why the hell is this even an option?
-    handle_deprecated_config FILL_INSERTION RUN_FILL_INSERTION;
-
     handle_deprecated_config SYNTH_CLOCK_UNCERTAINITY SYNTH_CLOCK_UNCERTAINTY;
 
     handle_deprecated_config LIB_RESIZER_OPT RSZ_LIB;
@@ -739,7 +737,7 @@ proc prep {args} {
         merge_lib\
             -output $::env(LIB_SYNTH_MERGED)\
             -name $::env(PDK)_merged\
-            -inputs $::env(LIB_SYNTH_COMPLETE)
+            -inputs {*}$::env(LIB_SYNTH_COMPLETE)
 
         # trim synthesis library
         set ::env(LIB_SYNTH) $::env(synthesis_tmpfiles)/trimmed.lib
