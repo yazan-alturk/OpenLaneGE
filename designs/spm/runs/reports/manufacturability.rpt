@@ -1,0 +1,16 @@
+Design Name: spm
+Run Directory: /openlane/designs/spm/runs
+----------------------------------------
+
+Magic DRC Summary:
+Source: /openlane/designs/spm/runs/reports/signoff/drc.rpt
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /openlane/designs/spm/runs/logs/signoff/spm.lvs.lef.log
+Source not found.
+----------------------------------------
+
+Antenna Summary:
+No antenna report found.

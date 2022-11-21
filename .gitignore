@@ -33,7 +33,7 @@ default.cvcrc
 *.config
 
 # PDK
-pdks/
+
 
 # Misc
 /resolved_version

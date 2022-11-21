@@ -1,0 +1,6 @@
+<< properties >>
+string FIXED_BBOX 0 0 20370 22514
+string GDS_END 1095284
+string GDS_FILE /openlane/designs/spm/runs/results/signoff/spm.magic.gds
+string GDS_START 153052
+<< end >>
