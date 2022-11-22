@@ -1,4 +1,4 @@
-* Extracted by KLayout on : 21/11/2022 10:27
+* Extracted by KLayout on : 22/11/2022 11:02
 
 .SUBCKT spm \_088_ \_205_ \_092_ VGND \_094_ net1 \_122_ \_199_ \_126_ rst
 + \_124_ net31 genblk1\[7\].csa.hsum2 \_095_ \_082_ VPWR \_120_ \_129_

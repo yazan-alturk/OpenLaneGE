@@ -2,7 +2,7 @@
 <report-database>
  <description>SKY130 DRC runset</description>
  <original-file/>
- <generator>drc: script='/home/yazan/OpenLane/pdks/sky130A/libs.tech/klayout/drc/sky130A.lydrc'</generator>
+ <generator>drc: script='/openlane/pdks/sky130A/libs.tech/klayout/drc/sky130A.lydrc'</generator>
  <top-cell>spm</top-cell>
  <tags>
  </tags>
